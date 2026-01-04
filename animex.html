@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Animex</title>
+<style>
+:root{
+  --bg:#0f0f0f;
+  --card:#1c1c1c;
+  --text:#ffffff;
+  --red:#ff2e2e;
+}
+.light{
+  --bg:#f2f2f2;
+  --card:#ffffff;
+  --text:#000000;
+}
+
+html, body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow-x:hidden; /* yatay kaydırmayı engeller */
+  font-family:Segoe UI,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+#login, #site {
+  min-height:100vh;   /* ekran boyuna göre ayarlanır */
+  overflow-y:auto;    /* dikey kaydırma aktif */
+}
+
+/* LOGIN */
+.login-box{
+  background:var(--card);
+  padding:50px;
+  border-radius:20px;
+  text-align:center;
+  margin:50px auto;
+  max-width:350px;
+}
+.login-box h2{
+  font-size:28px;
+  margin-bottom:30px;
+}
+.login-box input{
+  width:250px;
+  font-size:18px;
+  padding:12px;
+  margin-bottom:20px;
+}
+.login-box button{
+  font-size:18px;
+  padding:12px 25px;
+  cursor:pointer;
+}
+
+/* HEADER */
+header{
+  background:var(--red);
+  padding:15px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+}
+header h2{
+  font-size:22px;
+  margin:5px 0;
+}
+header input#search{
+  width:80%;       /* büyük ve geniş */
+  font-size:22px;
+  padding:15px;
+  border-radius:8px;
+  margin:5px 0;
+}
+header button{
+  padding:10px 15px;
+  font-size:16px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  margin:5px;
+}
+
+/* ANIME LİSTESİ */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;
+  padding:20px;
+  padding-bottom:50px; /* alt boşluk kaydırma için */
+}
+/* Kartlar şimdilik boş */
+.card{
+  background:var(--card);
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
+.card:hover{transform:scale(1.07);}
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+.card p{text-align:center;padding:10px;}
+
+/* PLAYER */
+#player{
+  display:none;
+  padding:20px;
+}
+iframe{
+  width:100%;
+  height:360px;
+  border-radius:12px;
+}
+#site{display:none;}
+</style>
+</head>
+
+<body>
+
+<!-- GİRİŞ -->
+<div id="login">
+  <div class="login-box">
+    <h2>🔐 Animex Giriş</h2>
+    <input id="user" placeholder="Kullanıcı adı"><br>
+    <button onclick="giris()">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- SİTE -->
+<div id="site">
+<header>
+  <h2>🔥 Animex</h2>
+  <input id="search" placeholder="Anime ara..." onkeyup="ara()">
+  <div>
+    <button onclick="tema()">🌙</button>
+    <button onclick="cikis()">Çıkış</button>
+  </div>
+</header>
+
+<!-- ANİME LİSTESİ (BOŞ) -->
+<div class="container" id="list">
+  <!-- İstediğin animeleri buraya ekleyeceğiz -->
+</div>
+
+<!-- BÖLÜM İZLEME -->
+<div id="player">
+  <button onclick="geri()">⬅ Geri</button>
+  <h2 id="animeAdi"></h2>
+  <iframe src="" allowfullscreen></iframe>
+</div>
+</div>
+
+<script>
+/* OTOMATİK GİRİŞ */
+if(localStorage.user){siteAc();}
+
+function giris(){
+  let u=user.value;
+  if(u){
+    localStorage.user=u;
+    siteAc();
+  }
+}
+function siteAc(){
+  login.style.display="none";
+  site.style.display="block";
+}
+function cikis(){
+  localStorage.clear();
+  location.reload();
+}
+function izle(ad,link){
+  list.style.display="none";
+  player.style.display="block";
+  animeAdi.innerText=ad;
+  document.querySelector("#player iframe").src=link;
+}
+function geri(){
+  player.style.display="none";
+  list.style.display="grid";
+  document.querySelector("#player iframe").src="";
+}
+function ara(){
+  let f=search.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(c=>{
+    c.style.display=c.innerText.toLowerCase().includes(f)?"block":"none";
+  });
+}
+function tema(){
+  document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>
